@@ -1,0 +1,69 @@
+<form [formGroup]="newEvent" class="form" (ngSubmit)="onSubmit()">
+
+  <ion-card>
+    <ion-item>
+      <ion-label position="floating">Locación</ion-label>
+      <ion-input formControlName="location"></ion-input>
+    </ion-item>
+    @if(location.invalid && (location.dirty || location.touched)){
+      @if(location.hasError('required')){
+        <ion-text color="danger">
+          <small>La locación es obligatoria</small>
+        </ion-text>
+      }
+    }
+
+    <ion-item>
+      <ion-label position="floating">Descripción</ion-label>
+      <ion-textarea formControlName="description"></ion-textarea>
+    </ion-item>
+    @if(description.invalid && (description.dirty || description.touched)){
+      @if(description.hasError('required')){
+        <ion-text color="danger">
+          <small>La descripción es obligatoria</small>
+        </ion-text>
+      }
+    }
+
+    <ion-item>
+      <ion-label position="floating">Fecha del evento</ion-label>
+      <ion-datetime formControlName="date" presentation="date"></ion-datetime>
+    </ion-item>
+    @if(date.invalid && (date.dirty || date.touched)){
+      @if(date.hasError('required')){
+        <ion-text color="danger">
+          <small>La fecha es obligatoria</small>
+        </ion-text>
+      }
+    }
+
+    <ion-item>
+      <ion-label position="floating">Hora de inicio</ion-label>
+      <ion-datetime formControlName="startHour" presentation="time"></ion-datetime>
+    </ion-item>
+    @if(startHour.invalid && (startHour.dirty || startHour.touched)){
+      @if(startHour.hasError('required')){
+        <ion-text color="danger">
+          <small>La hora de inicio es obligatoria</small>
+        </ion-text>
+      }
+    }
+
+    <ion-item>
+      <ion-label position="floating">Hora de finalización</ion-label>
+      <ion-datetime formControlName="endHour" presentation="time"></ion-datetime>
+    </ion-item>
+    @if(endHour.invalid && (endHour.dirty || endHour.touched)){
+      @if(endHour.hasError('required')){
+        <ion-text color="danger">
+          <small>La hora de finalización es obligatoria</small>
+        </ion-text>
+      }
+    }
+
+    <ion-button expand="block" type="submit" [disabled]="newEvent.invalid">
+      + Agregar evento
+    </ion-button>
+
+  </ion-card>
+</form>

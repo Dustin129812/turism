@@ -51,7 +51,7 @@
             </ion-toolbar>
           </ion-header>
           <ion-content class="ion-padding">
-            <app-register></app-register>
+            <app-register (closeModal)="setOpen(false)"></app-register>
           </ion-content>
         </ng-template>
       </ion-modal>

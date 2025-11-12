@@ -1,0 +1,38 @@
+<ion-card>
+  <ion-card-content>
+    <ion-buttons>
+      <ion-button (click)="setOpenLocation(true)">Agregar locaciones </ion-button>
+      <ion-button (click)="setOpenEvent(true)">Agregar Eventos </ion-button>
+    </ion-buttons>
+    <ion-modal [isOpen]="modalLocation">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>Nueva Locación</ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="setOpenLocation(false)">Close</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <app-locations (closeModal)="setOpenLocation(false)"></app-locations>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+    <ion-modal [isOpen]="modalEvent">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>Nuevo Evento</ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="setOpenEvent(false)">Close</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <app-events (closeModal)="setOpenEvent(false)"></app-events>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+  </ion-card-content>
+</ion-card>

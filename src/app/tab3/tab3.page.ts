@@ -3,6 +3,8 @@ import { IonHeader, IonToolbar, IonTitle, IonContent, IonText, IonButton, IonBut
 import { LoginService } from '../services/login-service';
 import { DeviceService } from '../services/device.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { LocationService } from '../services/location.service';
+import { AppLocation } from '../interfaces/location.interface';
 @Component({
   selector: 'app-tab3',
   templateUrl: 'tab3.page.html',
@@ -14,15 +16,16 @@ export class Tab3Page implements OnInit{
   deviceService=inject(DeviceService);
   mapUrlSafe?: SafeResourceUrl;
   private sanitizer = inject(DomSanitizer);
+  locations: AppLocation[] = [];
 
   logOut(){
     this.loginsservice.logout();
   }
-  constructor() {}
+  constructor(private locationService:LocationService) {
+  }
 
 
   ngOnInit() {
-
   }
   lat=0;
   lng=0;
@@ -34,19 +37,39 @@ export class Tab3Page implements OnInit{
       this.lng = pos.coords.longitude;
 
       this.updateMapUrl();
+      this.featchLocation();
     } catch (e) {
       console.error(e);
     }
   }
 
-  updateMapUrl() {
-    if (this.lat && this.lng) {
-      const bbox = `${this.lng - 0.01}%2C${this.lat - 0.01}%2C${this.lng + 0.01}%2C${this.lat + 0.01}`;
-      const url = `https://www.openstreetmap.org/export/embed.html?bbox=${bbox}&layer=mapnik&marker=${this.lat}%2C${this.lng}`;
-      this.mapUrlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(url);
-    } else {
-      this.mapUrlSafe = undefined;
+mapUrlsSafe: SafeResourceUrl[] = [];
+
+updateMapUrl() {
+  this.mapUrlsSafe = [];
+
+  if (this.locations && this.locations.length > 0) {
+    this.mapUrlsSafe = this.locations
+      .filter(loc => loc.latitude && loc.longitude)
+      .map(loc => {
+        const url = `https://staticmap.openstreetmap.de/staticmap.php?center=${loc.latitude},${loc.longitude}&zoom=14&size=600x400&markers=${loc.latitude},${loc.longitude},red-pushpin`;
+        return this.sanitizer.bypassSecurityTrustResourceUrl(url);
+      });
+  } else if (this.lat && this.lng) {
+    const url = `https://staticmap.openstreetmap.de/staticmap.php?center=${this.lat},${this.lng}&zoom=14&size=600x400&markers=${this.lat},${this.lng},blue-pushpin`;
+    this.mapUrlsSafe = [this.sanitizer.bypassSecurityTrustResourceUrl(url)];
+  }
+}
+
+  async featchLocation(){
+    try {
+
+      const response =await this.locationService.featchLocation();
+      this.locations=response;
+      this.updateMapUrl();
+
+    } catch (error) {
+      alert("no se pudo cargar las locaciones "+error)
     }
   }
-
 }

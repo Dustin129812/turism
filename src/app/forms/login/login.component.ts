@@ -60,11 +60,17 @@ export class LoginComponent implements OnInit {
   }
 
   async onSubmit() {
-    if (this.login.valid) {
-      const response = await this.loginService.login(this.login);
-      if(response){
-        this.router.navigate(['/app/tabs/tab3']);
-      }
+    try {
+      if (this.login.valid) {
+        const response = await this.loginService.login(this.login);
+        if(response){
+          this.router.navigate(['/app/tabs/tab3']);
+        }
+
+    }
+
+    } catch (error) {
+      alert(" no se pudo iniciar sesion "+error)
     }
   }
 }

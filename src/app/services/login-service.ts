@@ -1,4 +1,4 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { AbstractControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
@@ -14,20 +14,36 @@ export class LoginService {
 
   constructor(private http:HttpClient,private router: Router){}
 
-  async login(control:AbstractControl): Promise<boolean> {
+async login(control: AbstractControl): Promise<boolean> {
+  try {
+    const email = control.get('userName')?.value;
+    const password = control.get('password')?.value;
+    console.log('API URL:', this.apiUrl);
+
+    const response = await firstValueFrom(
+      this.http.post<{ token: string }>(`${this.apiUrl}/login`, { email, password })
+    );
+
+    console.log('✅ Login exitoso:', response);
+
+    await Preferences.set({ key: 'token', value: response.token });
+    localStorage.setItem('token', response.token);
+    return true;
+
+  } catch (err: any) {
+    console.error('❌ Error al iniciar sesión:', err);
+    alert('Error de login: ' + JSON.stringify(err.error || err.message));
+    return false;
+  }
+}
+
+  async refister(data:any){
+
     try {
-      const email = control.get('userName')?.value;
-      const password = control.get('password')?.value;
+      const response=await firstValueFrom(this.http.post(`${this.apiUrl}/register`,data))
 
-      const response = await firstValueFrom(
-        this.http.post<{ token: string }>(`${this.apiUrl}/login`, { email, password })
-      )
-      await Preferences.set({ key: 'token', value: response.token });
-      localStorage.setItem('token', response.token);
-      return true;
-    } catch (err) {
-
-      return false;
+    } catch (error) {
+      alert("error al registrarce "+error)
     }
   }
 
@@ -38,5 +54,6 @@ export class LoginService {
 
   async logout() {
     await Preferences.remove({ key: 'token' });
+    this.router.navigate([""])
   }
 }

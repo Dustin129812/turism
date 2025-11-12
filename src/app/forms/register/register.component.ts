@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
   Constantes,
@@ -16,6 +16,7 @@ import {
   IonText,
   IonCard,
 } from '@ionic/angular/standalone';
+import { LoginService } from 'src/app/services/login-service';
 
 
 @Component({
@@ -34,6 +35,8 @@ import {
   ],
 })
 export class RegisterComponent implements OnInit {
+  @Output() closeModal = new EventEmitter<void>();
+  loginService=inject(LoginService);
   constantes = Constantes;
   formBuilder = inject(FormBuilder);
   register = this.formBuilder.group(
@@ -73,9 +76,17 @@ export class RegisterComponent implements OnInit {
 
   ngOnInit() {}
 
-  onSubmit() {
+  async onSubmit() {
     if (this.register.valid) {
-      alert('datos validos');
+      try{
+        await this.loginService.refister(this.register.value)
+      alert('Usuario registrado con éxito!');
+      this.closeModal.emit();
+    } catch (err) {
+      console.error(err);
+      alert('Error al registrar usuario');
+    }
+
     }
   }
 }

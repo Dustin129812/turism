@@ -1,0 +1,27 @@
+<form [formGroup]="newLocation" class="form" (ngSubmit)="onSubmit()">
+
+  <ion-card >
+    <ion-item>
+      <ion-label>Nombre de la locación</ion-label>
+    </ion-item>
+    <ion-item>
+      <ion-input formControlName="name"></ion-input>
+    </ion-item>
+    <ion-text color="success">
+      <h2>Coordenadas</h2>
+    </ion-text>
+    <ion-item>
+      <ion-label>Latitud</ion-label>
+      <ion-input formControlName="latitude"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label>Longitud</ion-label>
+      <ion-input formControlName="longitude"></ion-input>
+    </ion-item>
+
+    <ion-button expand="block" type="submit" [disabled]="newLocation.invalid">
+      + Agregar locación
+    </ion-button>
+
+  </ion-card>
+</form>
