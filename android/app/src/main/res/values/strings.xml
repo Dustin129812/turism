@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">turismo</string>
+    <string name="title_activity_main">turismo</string>
+    <string name="package_name">com.yavirac.deph</string>
+    <string name="custom_url_scheme">com.yavirac.deph</string>
+</resources>

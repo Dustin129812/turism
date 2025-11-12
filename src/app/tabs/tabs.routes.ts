@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { TabsPage } from './tabs.page';
+import { loginGuard } from '../guards/login-guard';
 
 export const routes: Routes = [
   {
@@ -19,7 +20,17 @@ export const routes: Routes = [
       {
         path: 'tab3',
         loadComponent: () =>
-          import('../tab3/tab3.page').then((m) => m.Tab3Page),
+          import('../tab3/tab3.page').then((m) => m.Tab3Page),canActivate:[loginGuard]
+      },
+      {
+        path: 'tab4',
+        loadComponent: () =>
+          import('../tab4/tab4.component').then((m) => m.Tab4Component),canActivate:[loginGuard]
+      },
+      {
+        path: 'tab5',
+        loadComponent: () =>
+          import('../tab5/tab5.component').then((m) => m.Tab5Component),canActivate:[loginGuard]
       },
       {
         path: '',

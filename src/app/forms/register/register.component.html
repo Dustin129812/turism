@@ -1,0 +1,112 @@
+<ion-card>
+  <form [formGroup]="register" class="form" (ngSubmit)="onSubmit()">
+    @if(name.invalid && (name.touched || name.dirty)){
+      @if(name.hasError(constantes.required)){
+        <ion-text color="danger">
+          <small>***En nombre es obligatorio</small>
+        </ion-text>
+      }
+    }
+      <ion-item>
+        <ion-label>Nombre: </ion-label>
+        <ion-input formControlName="name"></ion-input>
+      </ion-item>
+      @if(country.invalid && (country.touched || country.dirty)){
+        @if(country.hasError(constantes.required)){
+          <ion-text color="danger">
+            <small>***En país es obligatorio</small>
+          </ion-text>
+        }
+    }
+      <ion-item>
+        <ion-label>Pais: </ion-label>
+        <ion-input formControlName="country"></ion-input>
+      </ion-item>
+      @if(birthdate.invalid && (birthdate.touched || birthdate.dirty)){
+        @if(birthdate.hasError(constantes.required)){
+          <ion-text color="danger">
+            <small>*** La fecha es obligatoria</small>
+          </ion-text>
+        }
+        @if(birthdate.hasError(constantes.minAgeInvalid)){
+          <ion-text color="danger">
+            <small>*** Debe tener al menos 15 años</small>
+          </ion-text>
+        }
+    }
+      <ion-item>
+        <ion-label>Fecha de nacimiento: </ion-label>
+        <ion-input type="date" formControlName="birthdate"></ion-input>
+      </ion-item>
+      @if((phone.touched || phone.dirty) && phone.invalid){
+        @if (phone.hasError(constantes.required)) {
+          <ion-text color="danger">
+            <small>*** El Teléfono es obligatorio</small>
+          </ion-text>
+        }
+        @if (phone.hasError(constantes.pattern)) {
+          <ion-text color="danger">
+            <small>*** Solo se permiten números y debe ser no menor a 9 caracteres </small>
+          </ion-text>
+        }
+      }
+      <ion-item>
+        <ion-label>Teléfono: </ion-label>
+        <ion-input type="tel" formControlName="phone"></ion-input>
+      </ion-item>
+      @if(email.invalid && (email.touched || email.dirty)){
+        @if(email.hasError(constantes.required)){
+          <ion-text color="danger">
+            <small>*** En email es obligatorio</small>
+          </ion-text>
+        }
+        @if(email.hasError(constantes.domianInvalid)){
+          <ion-text color="danger">
+            <small>*** El dominio debe ser '@gmail.com' o '@yavirac.edu.ec'</small>
+          </ion-text>
+        }
+    }
+      <ion-item>
+        <ion-label>Email/Usuario: </ion-label>
+        <ion-input formControlName="email"></ion-input>
+      </ion-item>
+      @if(password.invalid && (password.touched || password.dirty)){
+        @if(password.hasError(constantes.required)){
+          <ion-text color="danger">
+            <small>*** La contraseña es obligatoria</small>
+          </ion-text>
+        }
+        @if(password.hasError(constantes.passwordInvalid)){
+          <ion-text color="danger">
+            <small>{{ password.getError(constantes.passwordInvalid).message }}</small>
+          </ion-text>
+        }
+    }
+      <ion-item>
+        <ion-label>Contraseña: </ion-label>
+        <ion-input formControlName="password">
+        </ion-input>
+      </ion-item>
+      @if(confirmPassword.invalid && (confirmPassword.touched || confirmPassword.dirty)){
+        @if(confirmPassword.hasError(constantes.required)){
+          <ion-text color="danger">
+            <small>*** La confirmación de la contraseña es obligatoria</small>
+          </ion-text>
+        }
+        @if(confirmPassword.hasError(constantes.passwordMismatch)){
+          <ion-text color="danger">
+            <small>*** Las contraseñas no coinciden</small>
+          </ion-text>
+        }
+    }
+      <ion-item>
+        <ion-label>Confirmar contraseña: </ion-label>
+        <ion-input type="password" formControlName="confirmPassword">
+          <ion-input-password-toggle slot="end" ></ion-input-password-toggle>
+        </ion-input>
+      </ion-item>
+        <ion-button expand="block" type="submit" [disabled]="register.invalid">
+        Iniciar sesión
+      </ion-button>
+      </form>
+</ion-card>

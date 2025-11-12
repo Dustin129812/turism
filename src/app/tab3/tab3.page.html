@@ -1,17 +1,52 @@
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-title>
-      Tab 3
+      MAPA
     </ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="logOut()">Cerrar Sesión</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <ion-header collapse="condense">
     <ion-toolbar>
-      <ion-title size="large">Tab 3</ion-title>
+      <ion-title size="large">MAPA</ion-title>
     </ion-toolbar>
   </ion-header>
+  <ion-text color="medium">
+    <h1>MAPA</h1>
+  </ion-text>
+  <ion-card>
+    <ion-card-header>
+      <ion-card-title>Ubicación</ion-card-title>
+      <ion-card-subtitle>GPS en tiempo real</ion-card-subtitle>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-button (click)="getLocationOnce()">
+        <ion-icon name="locate" slot="start"></ion-icon>
+        Obtener ubicación actual
+      </ion-button>
 
-  <app-explore-container name="Tab 3 page"></app-explore-container>
+
+
+      <div class="ion-margin-top">
+        <p><strong>Lat:</strong> {{ lat || '—' }} | <strong>Lng:</strong> {{ lng || '—' }}</p>
+      </div>
+
+      <!-- Mapa web opcional (solo muestra un mapa estático con marker usando OpenStreetMap/Leaflet externo) -->
+
+      @if (lat && lng && mapUrlSafe) {
+        <div class="map-wrapper">
+          <iframe
+            [src]="mapUrlSafe"
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+            style="border:0">
+          </iframe>
+        </div>
+      }
+    </ion-card-content>
+  </ion-card>
 </ion-content>

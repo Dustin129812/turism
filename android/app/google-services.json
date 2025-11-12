@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "1020871557810",
+    "project_id": "paredes-5a302",
+    "storage_bucket": "paredes-5a302.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1020871557810:android:ebf92b38d9479d18a6ffab",
+        "android_client_info": {
+          "package_name": "com.yavirac.deph"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC_hsCfKAj-1GkUXFII_o_Ls6azQ283wM0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

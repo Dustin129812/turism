@@ -1,0 +1,62 @@
+
+
+  <ion-card>
+    <ion-card-content>
+      <ion-card-header>
+        <ion-card-title>Login</ion-card-title>
+      </ion-card-header>
+    @if((userName.dirty||userName.touched)&& userName.invalid){
+      @if (userName.hasError(constantes.required)) {
+        <ion-text color="danger">
+            <small>***El usuario es obligatorio</small>
+          </ion-text>
+        }
+      @if (userName.hasError(constantes.domianInvalid)) {
+        <ion-text color="danger">
+            <small>***El dominio debe ser '@gmail.com' o '@yavirac.edu.ec'</small>
+          </ion-text>
+        }
+    }
+    <form [formGroup]="login" class="form" (ngSubmit)="onSubmit()">
+      <ion-item>
+        <ion-label>Usuario: </ion-label>
+        <ion-input formControlName="userName"></ion-input>
+      </ion-item>
+      @if(password.touched && password.invalid){
+        @if (password.hasError(constantes.required)) {
+          <ion-text color="danger">
+              <small>***La Contraseña es obligatoria</small>
+            </ion-text>
+          }
+        }
+      <ion-item>
+        <ion-label>Contraseña: </ion-label>
+        <ion-input type="password" formControlName="password">
+          <ion-input-password-toggle slot="end" ></ion-input-password-toggle>
+        </ion-input>
+        </ion-item>
+        <ion-button expand="block" type="submit" [disabled]="login.invalid">
+        Iniciar sesión
+      </ion-button>
+      </form>
+      <ion-button expand="block" (click)="setOpen(true)">Registrarse</ion-button>
+      <ion-modal [isOpen]="isModalOpen">
+        <ng-template>
+          <ion-header>
+            <ion-toolbar>
+              <ion-title>Registrarse</ion-title>
+              <ion-buttons slot="end">
+                <ion-button (click)="setOpen(false)">Close</ion-button>
+              </ion-buttons>
+            </ion-toolbar>
+          </ion-header>
+          <ion-content class="ion-padding">
+            <app-register></app-register>
+          </ion-content>
+        </ng-template>
+      </ion-modal>
+    </ion-card-content>
+  </ion-card>
+
+
+
