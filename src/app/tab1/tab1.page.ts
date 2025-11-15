@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonButton, IonButtons, IonModal } from '@ionic/angular/standalone';
 import { Tab4Component } from "../tab4/tab4.component";
+import { EventService } from '../services/event.service';
+import { AppEvent } from '../interfaces/event.interface';
 
 
 @Component({
@@ -11,9 +13,16 @@ import { Tab4Component } from "../tab4/tab4.component";
 })
 export class Tab1Page {
   isModalOpen = false;
-
+  events:AppEvent[]=[];
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
   }
-  constructor() {}
+  constructor(private eventService:EventService) {
+    this.featchEvents();
+  }
+
+  async featchEvents(){
+    const response= await this.eventService.featchEvent();
+    this.events=response
+  }
 }

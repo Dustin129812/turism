@@ -16,7 +16,7 @@ import {
   IonText,
   IonCard,
 } from '@ionic/angular/standalone';
-import { LoginService } from 'src/app/services/login-service';
+import { LoginService } from 'src/app/services/login.service';
 
 
 @Component({

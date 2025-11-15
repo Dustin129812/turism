@@ -35,11 +35,19 @@
           <ion-input-password-toggle slot="end" ></ion-input-password-toggle>
         </ion-input>
         </ion-item>
-        <ion-button expand="block" type="submit" [disabled]="login.invalid">
-        Iniciar sesión
-      </ion-button>
+
+        @if(credentials){
+          <ion-button expand="block" color="primary" (click)="loginWithBiometrics()">
+            Acceder con huella
+          </ion-button>
+        }@else {
+          <ion-button expand="block" type="submit" [disabled]="login.invalid" color="warning">
+            Iniciar sesión
+          </ion-button>
+        }
+
       </form>
-      <ion-button expand="block" (click)="setOpen(true)">Registrarse</ion-button>
+      <ion-button expand="block" (click)="setOpen(true)" color="success">Registrarse</ion-button>
       <ion-modal [isOpen]="isModalOpen">
         <ng-template>
           <ion-header>

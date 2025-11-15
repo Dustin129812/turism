@@ -5,6 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { Preferences } from '@capacitor/preferences';
+import { LoginRequest } from '../interfaces/login.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -14,24 +15,31 @@ export class LoginService {
 
   constructor(private http:HttpClient,private router: Router){}
 
-async login(control: AbstractControl): Promise<boolean> {
+async login(data: AbstractControl | LoginRequest): Promise<boolean> {
   try {
-    const email = control.get('userName')?.value;
-    const password = control.get('password')?.value;
+      const email =
+        data instanceof AbstractControl
+          ? data.get('userName')?.value
+          : data.userName;
+      const password =
+      data instanceof AbstractControl
+        ? data.get('password')?.value
+        : data.password;
+
     console.log('API URL:', this.apiUrl);
 
     const response = await firstValueFrom(
       this.http.post<{ token: string }>(`${this.apiUrl}/login`, { email, password })
     );
 
-    console.log('✅ Login exitoso:', response);
+    console.log('Login exitoso:', response);
 
     await Preferences.set({ key: 'token', value: response.token });
     localStorage.setItem('token', response.token);
     return true;
 
   } catch (err: any) {
-    console.error('❌ Error al iniciar sesión:', err);
+    console.error('Error al iniciar sesión:', err);
     alert('Error de login: ' + JSON.stringify(err.error || err.message));
     return false;
   }

@@ -15,38 +15,43 @@
       <ion-title size="large">MAPA</ion-title>
     </ion-toolbar>
   </ion-header>
+
   <ion-text color="medium">
     <h1>MAPA</h1>
   </ion-text>
+
   <ion-card>
     <ion-card-header>
       <ion-card-title>Ubicación</ion-card-title>
       <ion-card-subtitle>GPS en tiempo real</ion-card-subtitle>
     </ion-card-header>
+
     <ion-card-content>
+
       <ion-button (click)="getLocationOnce()">
         <ion-icon name="locate" slot="start"></ion-icon>
         Obtener ubicación actual
       </ion-button>
 
-
-
       <div class="ion-margin-top">
-        <p><strong>Lat:</strong> {{ lat || '—' }} | <strong>Lng:</strong> {{ lng || '—' }}</p>
+        <p><strong>Lat:</strong> {{ lat || '—' }} |
+            <strong>Lng:</strong> {{ lng || '—' }}</p>
       </div>
 
-      <!-- Mapa web opcional (solo muestra un mapa estático con marker usando OpenStreetMap/Leaflet externo) -->
-
       @if (lat && lng && mapUrlSafe) {
-        <div class="map-wrapper">
+        <div class="map-wrapper ion-margin-top">
           <iframe
             [src]="mapUrlSafe"
+            width="100%"
+            height="350"
+            style="border:0; border-radius: 12px;"
             loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-            style="border:0">
+            allowfullscreen>
           </iframe>
         </div>
       }
+
     </ion-card-content>
   </ion-card>
+
 </ion-content>

@@ -1,6 +1,6 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { IonHeader, IonToolbar, IonTitle, IonContent, IonText, IonButton, IonButtons, IonIcon, IonCardContent, IonCardSubtitle, IonCardTitle, IonCardHeader, IonCard } from '@ionic/angular/standalone';
-import { LoginService } from '../services/login-service';
+import { LoginService } from '../services/login.service';
 import { DeviceService } from '../services/device.service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { LocationService } from '../services/location.service';
@@ -37,36 +37,31 @@ export class Tab3Page implements OnInit{
       this.lng = pos.coords.longitude;
 
       this.updateMapUrl();
-      this.featchLocation();
+
     } catch (e) {
       console.error(e);
     }
   }
 
-mapUrlsSafe: SafeResourceUrl[] = [];
+
 
 updateMapUrl() {
-  this.mapUrlsSafe = [];
-
-  if (this.locations && this.locations.length > 0) {
-    this.mapUrlsSafe = this.locations
-      .filter(loc => loc.latitude && loc.longitude)
-      .map(loc => {
-        const url = `https://staticmap.openstreetmap.de/staticmap.php?center=${loc.latitude},${loc.longitude}&zoom=14&size=600x400&markers=${loc.latitude},${loc.longitude},red-pushpin`;
-        return this.sanitizer.bypassSecurityTrustResourceUrl(url);
-      });
-  } else if (this.lat && this.lng) {
-    const url = `https://staticmap.openstreetmap.de/staticmap.php?center=${this.lat},${this.lng}&zoom=14&size=600x400&markers=${this.lat},${this.lng},blue-pushpin`;
-    this.mapUrlsSafe = [this.sanitizer.bypassSecurityTrustResourceUrl(url)];
+    if (this.lat && this.lng) {
+      const bbox = `${this.lng - 0.01}%2C${this.lat - 0.01}%2C${this.lng + 0.01}%2C${this.lat + 0.01}`;
+      const url = `https://www.google.com/maps?q=${this.lat},${this.lng}&z=15&output=embed`;
+      this.mapUrlSafe = this.sanitizer.bypassSecurityTrustResourceUrl(url);
+    } else {
+      this.mapUrlSafe = undefined;
+    }
   }
-}
+
 
   async featchLocation(){
     try {
 
       const response =await this.locationService.featchLocation();
       this.locations=response;
-      this.updateMapUrl();
+
 
     } catch (error) {
       alert("no se pudo cargar las locaciones "+error)

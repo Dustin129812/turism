@@ -9,6 +9,5 @@ export const routes: Routes = [
   {
     path: 'app',
     loadChildren: () => import('./tabs/tabs.routes').then((m) => m.routes),
-  },
-  {path:'dash',component:DashboardComponent}
+  }
 ];

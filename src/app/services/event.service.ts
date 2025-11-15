@@ -3,7 +3,8 @@ import { Injectable } from "@angular/core";
 import { Router } from "@angular/router";
 import { firstValueFrom } from "rxjs";
 import { environment } from "src/environments/environment";
-import { LoginService } from "./login-service";
+import { LoginService } from "./login.service";
+import { AppEvent } from "../interfaces/event.interface";
 
 @Injectable({providedIn:'root'})
 export class EventService{
@@ -18,12 +19,13 @@ export class EventService{
       });
 
     try{
-      const response=await firstValueFrom(this.http.get(`${this.apiUrl}/list`,{headers}))
+      const response=await firstValueFrom(this.http.get<AppEvent[]>(`${this.apiUrl}/list`,{headers}))
       return response
 
     }catch(err){
 
-      return alert("Error al traer los eventos " + err);
+      alert("Error al traer los eventos " + err);
+      throw err
     }
   }
 

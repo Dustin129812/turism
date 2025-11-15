@@ -12,9 +12,12 @@ import {
   IonCardHeader,
   IonCardTitle,
   IonCardContent, IonModal, IonToolbar, IonHeader, IonTitle, IonButtons, IonContent } from '@ionic/angular/standalone';
-import { LoginService } from 'src/app/services/login-service';
+import { LoginService } from 'src/app/services/login.service';
 import { RegisterComponent } from "../register/register.component";
 import { Router } from '@angular/router';
+import { DeviceService } from 'src/app/services/device.service';
+import { BiometricService } from 'src/app/services/biometric.service';
+import {NativeBiometric} from '@capgo/capacitor-native-biometric';
 
 @Component({
   selector: 'app-login',
@@ -34,9 +37,21 @@ import { Router } from '@angular/router';
     IonCardContent, IonModal, RegisterComponent],
 })
 export class LoginComponent implements OnInit {
+  private serviceName = 'com.yavirac.deph';
+  private bio = inject(BiometricService);
+  private device = inject(DeviceService);
   router=inject(Router);
   constantes = Constantes;
   isModalOpen = false;
+  msg='';
+  credentials=false;
+  async exist(){
+    const creds = await NativeBiometric.getCredentials({
+            server: this.serviceName
+        }).catch(() => null);
+        this.credentials = !!creds;
+
+  }
 
   setOpen(isOpen: boolean) {
     this.isModalOpen = isOpen;
@@ -49,7 +64,9 @@ export class LoginComponent implements OnInit {
     password: [null, [Validators.required, Validators.minLength(4)]],
   });
 
-  constructor() {}
+  constructor() {
+    this.exist();
+  }
   ngOnInit() {}
 
   get userName() {
@@ -64,6 +81,7 @@ export class LoginComponent implements OnInit {
       if (this.login.valid) {
         const response = await this.loginService.login(this.login);
         if(response){
+          await this.bio.saveTokenSecure(this.login.value);
           this.router.navigate(['/app/tabs/tab3']);
         }
 
@@ -71,6 +89,31 @@ export class LoginComponent implements OnInit {
 
     } catch (error) {
       alert(" no se pudo iniciar sesion "+error)
+    }
+  }
+
+  async loginWithBiometrics() {
+    const avail = await this.bio.isAvailable();
+
+    if (!avail.isAvailable) {
+      this.msg = 'Biometría no disponible en este dispositivo.';
+      return;
+    }
+
+    const creds = await this.bio.getTokenSecure('Confirma tu identidad');
+
+    if (creds) {
+
+      const res = await this.loginService.login({
+      userName: creds.username,
+      password: creds.password
+    });
+    }
+    if (creds) {
+      await this.device.successTap('Autenticación correcta');
+      this.router.navigate(['/app/tabs/tab3']);
+    } else {
+      await this.device.successTap('No hay token guardado o autenticación cancelada.');
     }
   }
 }
