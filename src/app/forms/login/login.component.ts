@@ -45,17 +45,7 @@ export class LoginComponent implements OnInit {
   isModalOpen = false;
   msg='';
   credentials=false;
-  async exist(){
-    const creds = await NativeBiometric.getCredentials({
-            server: this.serviceName
-        }).catch(() => null);
-        this.credentials = !!creds;
 
-  }
-
-  setOpen(isOpen: boolean) {
-    this.isModalOpen = isOpen;
-  }
   loginService = inject(LoginService);
 
   formBuilder = inject(FormBuilder);
@@ -76,6 +66,13 @@ export class LoginComponent implements OnInit {
     return this.login.controls['password'];
   }
 
+  async exist(){
+    const creds = await NativeBiometric.getCredentials({
+            server: this.serviceName
+        }).catch(() => null);
+        this.credentials = !!creds;
+
+  }
   async onSubmit() {
     try {
       if (this.login.valid) {
@@ -85,7 +82,7 @@ export class LoginComponent implements OnInit {
           this.router.navigate(['/app/tabs/tab3']);
         }
 
-    }
+      }
 
     } catch (error) {
       alert(" no se pudo iniciar sesion "+error)
@@ -105,9 +102,9 @@ export class LoginComponent implements OnInit {
     if (creds) {
 
       const res = await this.loginService.login({
-      userName: creds.username,
-      password: creds.password
-    });
+        userName: creds.username,
+        password: creds.password
+      });
     }
     if (creds) {
       await this.device.successTap('Autenticación correcta');
@@ -115,5 +112,14 @@ export class LoginComponent implements OnInit {
     } else {
       await this.device.successTap('No hay token guardado o autenticación cancelada.');
     }
+  }
+
+  setOpen(isOpen: boolean) {
+    this.isModalOpen = isOpen;
+  }
+  async deleteCredentials(){
+    await this.bio.deleteTokenSecure();
+    await this.device.successTap('Se eliminaron las credenciales');
+    await this.exist();
   }
 }

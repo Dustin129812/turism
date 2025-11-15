@@ -47,7 +47,14 @@
         }
 
       </form>
-      <ion-button expand="block" (click)="setOpen(true)" color="success">Registrarse</ion-button>
+      <div class="ion-text-center">
+        @if(credentials){
+          <ion-button fill="outline" color="tertiary" (click)="deleteCredentials()">
+            Eliminar Credenciales
+          </ion-button>
+        }
+        <ion-button fill="solid" (click)="setOpen(true)" color="success">Registrarse</ion-button>
+      </div>
       <ion-modal [isOpen]="isModalOpen">
         <ng-template>
           <ion-header>
